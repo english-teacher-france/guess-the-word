@@ -4,4 +4,4 @@ The goal: you have limited time to make your group guess what the mystery word i
 
 The game is meant to be played in groups in class, using one mobile phone per group.
 
-The original word lists were created using [Oxford 3000 and 5000](https://www.oxfordlearnersdictionaries.com/wordlists/oxford3000-5000), only keeping nouns, verbs and adjectives. New word list can be place in /lists.
+The original word lists were created using [Oxford 3000 and 5000](https://www.oxfordlearnersdictionaries.com/wordlists/oxford3000-5000), only keeping nouns, verbs and adjectives. New word lists can be placed in /lists and then don't forget to update /lists/index.json.

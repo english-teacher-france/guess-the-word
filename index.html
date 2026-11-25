@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4f46e5">
+  <title>Devine l'expression</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- ÉCRAN RÉGLAGES -->
+    <section id="screen-setup" class="screen active">
+      <h1>🎭 Devine l'expression</h1>
+
+      <label for="list-select">Liste</label>
+      <select id="list-select"></select>
+      <p id="list-info" class="hint"></p>
+
+      <label for="duration">Durée d'une manche (secondes)</label>
+      <input type="number" id="duration" min="10" max="600" step="5" value="60">
+
+      <label for="max-skips">Passes autorisées par manche</label>
+      <input type="number" id="max-skips" min="0" max="99" value="3">
+
+      <label class="checkbox">
+        <input type="checkbox" id="unlimited-skips">
+        Passes illimitées
+      </label>
+
+      <button id="btn-start" class="btn primary big">Jouer</button>
+      <p id="setup-error" class="error"></p>
+    </section>
+
+    <!-- ÉCRAN PRÊT -->
+    <section id="screen-ready" class="screen">
+      <h2>Prêt ?</h2>
+      <p class="hint">Le chrono démarre quand vous appuyez sur le bouton.</p>
+      <button id="btn-go" class="btn primary big">Lancer la manche</button>
+      <button class="btn link" data-action="to-setup">Réglages</button>
+    </section>
+
+    <!-- ÉCRAN JEU -->
+    <section id="screen-game" class="screen">
+      <div class="topbar">
+        <div id="timer" class="timer">60</div>
+        <div id="score" class="badge">✅ 0</div>
+        <div id="skips" class="badge">⏭️ 3</div>
+      </div>
+
+      <div id="word" class="word">…</div>
+
+      <div class="actions">
+        <button id="btn-skip" class="btn warn">Passer ⏭️</button>
+        <button id="btn-found" class="btn primary">Trouvé ✅</button>
+      </div>
+      <button id="btn-pause" class="btn link">⏸ Pause</button>
+    </section>
+
+    <!-- ÉCRAN FIN -->
+    <section id="screen-end" class="screen">
+      <h2 id="end-title">Temps écoulé !</h2>
+      <div id="end-score" class="big-score">0</div>
+      <p class="hint">expressions trouvées</p>
+      <button id="btn-next-turn" class="btn primary big">Tour suivant</button>
+      <button class="btn link" data-action="to-setup">Réglages</button>
+    </section>
+
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

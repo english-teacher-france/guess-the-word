@@ -91,6 +91,39 @@ input:disabled {
   height: 1.4rem;
 }
 
+/* ---------- Sélection de plusieurs listes ---------- */
+.lists-box {
+  border: 2px solid #c7d2fe;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.5rem 0.75rem 0.75rem;
+  margin: 0.5rem 0 0;
+  min-width: 0;
+}
+
+.lists-box legend {
+  font-weight: 600;
+  padding: 0 0.4rem;
+}
+
+.lists {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.lists .checkbox {
+  margin: 0;
+  padding: 0.5rem 0.25rem;
+  border-radius: 8px;
+}
+
+.lists .checkbox:hover {
+  background: #eef2ff;
+}
+
 .hint {
   color: var(--muted);
   font-size: 0.9rem;

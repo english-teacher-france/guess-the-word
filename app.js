@@ -49,7 +49,7 @@
     timeLeft: 0,
     interval: null,
     paused: false,
-    settings: { list: "", duration: 60, maxSkips: 3, unlimited: false },
+    settings: { lists: [], duration: 60, maxSkips: 3, unlimited: false },
   };
 
   const STORAGE_KEY = "devine-expression-settings";
@@ -139,6 +139,12 @@
     return [...new Set(words)]; // supprime les doublons
   }
 
+  // Charge et fusionne plusieurs listes (sans doublons)
+  async function loadWordsFromFiles(files) {
+    const results = await Promise.all(files.map(loadWords));
+    return [...new Set(results.flat())];
+  }
+
   /* ---------- Réglages ---------- */
   function saveSettings() {
     try {
@@ -149,15 +155,27 @@
   function restoreSettings() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (saved) Object.assign(state.settings, saved);
+      if (saved) {
+        // Compatibilité avec l'ancien réglage à liste unique
+        if (!Array.isArray(saved.lists)) {
+          saved.lists = saved.list ? [saved.list] : [];
+        }
+        delete saved.list;
+        Object.assign(state.settings, saved);
+      }
     } catch (_) { /* ignore */ }
+  }
+
+  function getSelectedLists() {
+    return Array.from(el.listSelect.querySelectorAll('input[type="checkbox"]:checked'))
+      .map((cb) => cb.value);
   }
 
   function readSettingsFromForm() {
     const duration = Math.max(10, Math.min(600, parseInt(el.duration.value, 10) || 60));
     const maxSkips = Math.max(0, Math.min(99, parseInt(el.maxSkips.value, 10) || 0));
     state.settings = {
-      list: el.listSelect.value,
+      lists: getSelectedLists(),
       duration,
       maxSkips,
       unlimited: el.unlimited.checked,
@@ -173,11 +191,14 @@
   }
 
   async function updateListInfo() {
-    const file = el.listSelect.value;
-    if (!file) { el.listInfo.textContent = ""; return; }
+    const files = getSelectedLists();
+    if (!files.length) { el.listInfo.textContent = "Sélectionnez au moins une liste."; return; }
     try {
-      const words = await loadWords(file);
-      el.listInfo.textContent = `${words.length} expression(s) dans cette liste`;
+      const words = await loadWordsFromFiles(files);
+      // Évite d'afficher un résultat périmé si la sélection a changé entre-temps
+      if (getSelectedLists().join("|") !== files.join("|")) return;
+      el.listInfo.textContent =
+        `${words.length} expression(s) dans ${files.length} liste(s) sélectionnée(s)`;
     } catch (_) {
       el.listInfo.textContent = "";
     }
@@ -188,15 +209,19 @@
     el.setupError.textContent = "";
     readSettingsFromForm();
 
-    if (!state.settings.list) {
+    if (!state.lists.length) {
       el.setupError.textContent = "Aucune liste disponible.";
+      return;
+    }
+    if (!state.settings.lists.length) {
+      el.setupError.textContent = "Sélectionnez au moins une liste.";
       return;
     }
 
     try {
-      const words = await loadWords(state.settings.list);
+      const words = await loadWordsFromFiles(state.settings.lists);
       if (!words.length) {
-        el.setupError.textContent = "Cette liste est vide.";
+        el.setupError.textContent = "Les listes sélectionnées sont vides.";
         return;
       }
       state.words = shuffle(words);
@@ -345,17 +370,22 @@
       return;
     }
 
+    // Sélection initiale : réglages enregistrés, sinon première liste
+    let selected = state.settings.lists.filter((f) => state.lists.some((l) => l.file === f));
+    if (!selected.length && state.lists.length) selected = [state.lists[0].file];
+
     el.listSelect.innerHTML = "";
     state.lists.forEach((l) => {
-      const opt = document.createElement("option");
-      opt.value = l.file;
-      opt.textContent = l.name;
-      el.listSelect.appendChild(opt);
+      const label = document.createElement("label");
+      label.className = "checkbox";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.value = l.file;
+      cb.checked = selected.includes(l.file);
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(l.name));
+      el.listSelect.appendChild(label);
     });
-
-    if (state.lists.some((l) => l.file === state.settings.list)) {
-      el.listSelect.value = state.settings.list;
-    }
     updateListInfo();
   }
 

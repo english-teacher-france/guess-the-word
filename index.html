@@ -14,8 +14,10 @@
     <section id="screen-setup" class="screen active">
       <h1>🎭 Guess the word</h1>
 
-      <label for="list-select">Liste</label>
-      <select id="list-select"></select>
+      <fieldset class="lists-box">
+        <legend>Listes (une ou plusieurs)</legend>
+        <div id="list-select" class="lists"></div>
+      </fieldset>
       <p id="list-info" class="hint"></p>
 
       <label for="duration">Durée d'une manche (secondes)</label>

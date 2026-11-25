@@ -45,25 +45,26 @@
     <section id="screen-game" class="screen">
       <div class="topbar">
         <div id="timer" class="timer">60</div>
-        <div id="score" class="badge">✅ 0</div>
-        <div id="skips" class="badge">⏭️ 3</div>
+        <div id="score" class="score">Score : 0</div>
+        <div id="skips" class="skips">Passes : 3</div>
+        <button id="btn-pause" class="btn small" aria-label="Pause">⏸</button>
       </div>
 
-      <div id="word" class="word">…</div>
+      <div id="word-box" class="word-box">
+        <div id="word" class="word">…</div>
+      </div>
 
       <div class="actions">
-        <button id="btn-skip" class="btn warn">Passer ⏭️</button>
-        <button id="btn-found" class="btn primary">Trouvé ✅</button>
+        <button id="btn-skip" class="btn warn big">⏭️ Passer</button>
+        <button id="btn-found" class="btn success big">✅ Trouvé</button>
       </div>
-      <button id="btn-pause" class="btn link">⏸ Pause</button>
     </section>
 
-    <!-- ÉCRAN FIN -->
+    <!-- ÉCRAN FIN DE MANCHE -->
     <section id="screen-end" class="screen">
-      <h2 id="end-title">Temps écoulé !</h2>
-      <div id="end-score" class="big-score">0</div>
-      <p class="hint">expressions trouvées</p>
-      <button id="btn-next-turn" class="btn primary big">Tour suivant</button>
+      <h2>⏰ Temps écoulé !</h2>
+      <p id="end-score" class="big-score"></p>
+      <button id="btn-next-turn" class="btn primary big">Équipe suivante</button>
       <button class="btn link" data-action="to-setup">Réglages</button>
     </section>
 
